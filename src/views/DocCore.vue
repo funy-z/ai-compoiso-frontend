@@ -144,14 +144,18 @@ const handleClickCast = (item: any) => {
     op_type,
   }
   if (op_sub_type) {
-    params.sub_type = op_sub_type
+    params.op_sub_type = op_sub_type
   }
   handleSearchAI(params)
   showMenu.value = false;
 }
 
 const handleSubmitCustom = () => {
-  // todo
+  const content = (quillEditorRef.value as any).getText()
+  handleSearchAI({
+    content,
+    question: question.value,
+  })
 }
 
 const handleReplace = () => {
