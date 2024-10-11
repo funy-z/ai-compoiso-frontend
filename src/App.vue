@@ -18,6 +18,6 @@ console.log('@@@build test')
 <style scoped>
 .home {
   /* padding: 24px 0; */
-  background-color: #ccc;
+  background-color: #F8FAFF;
 }
 </style>
