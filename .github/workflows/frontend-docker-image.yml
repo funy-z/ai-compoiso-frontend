@@ -42,3 +42,10 @@ jobs:
         run: |
           echo ${{ secrets.ORG_PAT_V2 }}
           docker push ghcr.io/funy-z/ai-composiso-frontend:latest
+
+      - name: Send Webhook Notification
+        run: |
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"status": "success", "data": { "repository_name": "ai-compoiso-frontend", "image_name": "ghcr.io/funy-z/ai-composiso-frontend:latest" }}' \
+            http://8.134.8.134:9081/webhook_github_action

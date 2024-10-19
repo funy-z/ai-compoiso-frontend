@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watchPostEffect, onMounted, ref, nextTick, computed } from 'vue'
+import { watchPostEffect, onMounted, ref, nextTick, computed, onBeforeUnmount } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useClipboard } from '@vueuse/core'
 
@@ -40,6 +40,10 @@ const content = ref(`小文盲在班里是学习最差的，整天像这假期�
 
 // 记录上一次请求AI接口的参数，重新生成的时候使用
 let preAIParams: any = null
+
+let lastCommandPressTime: number | null = null;
+const commandKey = 'Meta'; // 对应 Mac 的 Command 键
+const ctrlKey = 'Control'; // 对应 Windows 的 Ctrl 键
 
 const handleDblclick = async (event: any) => {
     showMenu.value = true;
@@ -156,6 +160,8 @@ const handleSubmitCustom = () => {
     content,
     question: question.value,
   })
+  question.value = ''
+  showMenu.value = false;
 }
 
 const handleReplace = () => {
@@ -201,6 +207,41 @@ const handleRegenerate = async (event: Event) => {
 const isShowBottomBar = computed(() => {
   return !!aiAnswer.value && !fetching.value
 })
+
+const handleKeyDown = (event: KeyboardEvent) => {
+      const currentTime = new Date().getTime();
+      const key = event.key;
+
+      if (key === commandKey || key === ctrlKey) {
+        if (lastCommandPressTime && (currentTime - lastCommandPressTime) < 500) {
+          // 如果两次按键间隔小于500毫秒，认为是连续按键
+          const quillInstance = (quillEditorRef.value as any).getQuillInst()
+          const editorElement = (quillEditorRef.value as any).getEditor()
+          if (quillInstance) {
+            const range = quillInstance.getSelection();
+            if (range) {
+              const bounds = quillInstance.getBounds(range.index);
+              // const editorElement = editor.value;
+              if (editorElement) {
+                const rect = editorElement.getBoundingClientRect();
+                handleDblclick({
+                  clientY: rect.top + bounds.top,
+                })
+              }
+            }
+          }
+        }
+        lastCommandPressTime = currentTime;
+      }
+};
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeyDown);
+});
 
 </script>
 <template>
