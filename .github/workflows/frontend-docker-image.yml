@@ -48,4 +48,4 @@ jobs:
           curl -X POST \
             -H "Content-Type: application/json" \
             -d '{"status": "success", "data": { "repository_name": "ai-compoiso-frontend", "image_name": "ghcr.io/funy-z/ai-compoiso-frontend:latest" }, "secret": "${{ secrets.WEBHOOK_SECRET }}"}' \
-            http://8.134.8.134:9081/webhook_github_action
+            ${{ secrets.WEBHOOK_SERVICES }}
