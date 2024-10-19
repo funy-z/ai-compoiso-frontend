@@ -6,7 +6,7 @@
   <RouterLink class="docs-icons" to="/doc">
     <div class="docs-text">
       <i class="iconfont icon-bianjiwenjian" />
-      <span>文档</span>
+      <span>文档X</span>
     </div>
   </RouterLink>
 </div>
