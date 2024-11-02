@@ -136,6 +136,8 @@ const handleSearchAI = async (params: any) => {
         break
       }
     }
+  } else {
+    fetching.value = false;
   }
 }
 
